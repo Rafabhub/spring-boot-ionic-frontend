@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, IonicPage } from 'ionic-angular';
 import { MenuController } from 'ionic-angular/components/app/menu-controller';
+import { CredenciaisDTO } from '../../models/credenciais.dto';
+import { AuthService } from '../../services/auth.service';
 
 @IonicPage()
 @Component({
@@ -9,21 +11,37 @@ import { MenuController } from 'ionic-angular/components/app/menu-controller';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public menu: MenuController) {
+    creds: CredenciaisDTO = {
+        email: "",
+        senha: ""
+    }
+
+    constructor(
+        public navCtrl: NavController,
+        public menu: MenuController,
+        public auth: AuthService
+        
+        ) {
 
 
-  }
+    }
 
-  ionViewWillEnter() {
+    ionViewWillEnter() {
         this.menu.swipeEnable(false);
-  }
-  ionViewDidLeave() {
-        this.menu.swipeEnable(true);
-  }
+    }
 
-  login() {
+    ionViewDidLeave() {
+        this.menu.swipeEnable(true);
+    }
+
+    login() {
+        this.auth.authenticate(this.creds)
+            .subscribe(res => {
+                console.log(res.headers.get('Authorization'));
+            },
+            error => {})
         this.navCtrl.setRoot('CategoriasPage'); //Navegação
-  }
+    }
 
   
 
