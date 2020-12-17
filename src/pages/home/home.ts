@@ -20,11 +20,7 @@ export class HomePage {
         public navCtrl: NavController,
         public menu: MenuController,
         public auth: AuthService
-        
-        ) {
-
-
-    }
+        ){}
 
     ionViewWillEnter() {
         this.menu.swipeEnable(false);
@@ -37,10 +33,11 @@ export class HomePage {
     login() {
         this.auth.authenticate(this.creds)
             .subscribe(res => {
-                console.log(res.headers.get('Authorization'));
+                this.auth.sucessfulLogin(res.headers.get('Authorization'));
+                this.navCtrl.setRoot('CategoriasPage'); //Navegação
             },
             error => {})
-        this.navCtrl.setRoot('CategoriasPage'); //Navegação
+        
     }
 
   
